@@ -7,6 +7,17 @@ ae = JsonResponse(
      'shortcut': 'ae'}, status=400)
 
 
+def error(e: Exception):
+    if config.MODE != 'debug':
+        return JsonResponse(
+            {'msg': 'other errors',
+             'shortcut': 'oe',
+             'data': str(e)}, status=400
+        )
+    else:
+        raise e
+
+
 def get_args(request: HttpRequest):
     if request.method == 'GET' and config.MODE == 'debug':
         return request.GET

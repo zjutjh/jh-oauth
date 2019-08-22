@@ -12,9 +12,7 @@ urlpatterns = [
     path('api/oauth/getcode', oauth.getcode, name='oauth.getcode'),
     path('api/oauth/alive', oauth.alive, name='oauth.alive'),
     path('api/oauth/openoauth', oauth.openoauth, name='oauth.openoauth'),
-    path('api/oauth/updateper', oauth.updateper, name='oauth.updateper'),
     path('api/oauth/getinfo', oauth.getinfo, name='oauth.getinfo'),
-    path('api/oauth/checkper', oauth.checkper, name='oauth.checkper'),
     path('api/oauth/move', oauth.move, name='oauth.move'),
     path('api/oauth/changeapp', oauth.changeapp, name='oauth.changeapp')
 ]

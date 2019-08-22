@@ -64,6 +64,8 @@ def login(request: HttpRequest):
 
     except KeyError:
         return tool.ae
+    except Exception as e:
+        return tool.error(e)
 
 
 def logout(request: HttpRequest):
@@ -94,6 +96,8 @@ def logout(request: HttpRequest):
 
     except KeyError:
         return tool.ae
+    except Exception as e:
+        return tool.error(e)
 
 
 def autologin(request: HttpRequest):
@@ -120,6 +124,8 @@ def autologin(request: HttpRequest):
                  'data': x.to_dic(x.token)}, True)
     except KeyError:
         return tool.ae
+    except Exception as e:
+        return tool.error(e)
 
 
 def getstate(request: HttpRequest):
@@ -135,6 +141,8 @@ def getstate(request: HttpRequest):
         )
     except KeyError:
         return tool.ae
+    except Exception as e:
+        return tool.error(e)
 
 
 def getaccessinfo(request: HttpRequest):
@@ -150,4 +158,6 @@ def getaccessinfo(request: HttpRequest):
         )
     except KeyError:
         return tool.ae
+    except Exception as e:
+        return tool.error(e)
 

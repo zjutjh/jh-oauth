@@ -199,7 +199,7 @@ class UserActivity(models.Model):
             software = data_raw['software']
             access_id = data_raw['access_id']
             device_type = data_raw['device_type']
-            sets = UserActivity.objects.filter(user= users[0], software=software, access_id=access_id, device_type=device_type)
+            sets = UserActivity.objects.filter(user=users[0], software=software, access_id=access_id, device_type=device_type)
             if len(sets) > 0:
                 return sets[0]
         return None
@@ -209,7 +209,6 @@ class AppScheme(models.Model):
     name = models.CharField(max_length=64)
     title = models.CharField(max_length=256, default='')
     owner = models.ForeignKey(User, related_name='apps', on_delete=models.CASCADE)
-    level = models.PositiveSmallIntegerField(default=0, choices=[(0, 'third'), (1, 'auth')])  # third,auth
     create_time = models.DateTimeField()
     description = models.TextField(default='')
     tags = models.TextField(default='')
@@ -249,22 +248,6 @@ class AppScheme(models.Model):
         return AppScheme.get(code_raw['name'])
 
     @property
-    def p_level(self):
-        if self.level == 0:
-            return 'third'
-        elif self.level == 1:
-            return 'auth'
-
-    @p_level.setter
-    def p_level(self, value):
-        if value == 'third':
-            self.level = 0
-        elif value == 'auth':
-            self.level = 1
-        else:
-            raise ValueError('Value is out of choice(third, auth)')
-
-    @property
     def p_state(self):
         if self.state == 0:
             return 'wait'
@@ -296,7 +279,6 @@ class AppScheme(models.Model):
         return {
             'name': self.name,
             'owner': self.owner.username,
-            'level': self.p_level,
             'create_time': format_time(self.create_time),
             'description': self.description,
             'tags': self.tags,
@@ -304,11 +286,5 @@ class AppScheme(models.Model):
         }
 
     def generate_appkey(self):
-        self.appkey = aes.encrypt(f'{self.name}::{self.owner.username}::{self.p_level}')
-
-
-class AppPer(models.Model):
-    name = models.CharField(max_length=64)  # 使用权限的名称
-    title = models.CharField(max_length=256)  # 使用权限的描述
-    owner = models.ForeignKey(AppScheme, related_name='own_pers', on_delete=models.CASCADE)
+        self.appkey = aes.encrypt(f'{self.name}::{self.owner.username}')
 
