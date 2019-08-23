@@ -54,16 +54,16 @@
 
 
 <script lang="ts">
-import DialogCom from '@/components/Dialog.vue';
+import DialogCom from '../components/Dialog.vue';
 import { Component, Prop, Vue, Emit } from 'vue-property-decorator';
-import TextField from '@/components/TextField.vue';
-import VButton from '@/components/Button.vue';
-import Card from '@/components/Card.vue';
+import TextField from '../components/TextField.vue';
+import VButton from '../components/Button.vue';
+import Card from '../components/Card.vue';
 import { postData, getData } from '../utils/fetch';
 import router from '../router';
-import { API, apiMap } from '@/utils/api';
-import { ActivationRequest, ActivationResponse } from '@/interface/backend/user/Activation';
-import stringFilter from '@/utils/stringFilter';
+import { API, apiMap } from '../utils/api';
+import { ActivationRequest, ActivationResponse } from '../interface/backend/user/Activation';
+import stringFilter from '../utils/stringFilter';
 @Component({
   components: { TextField, VButton, Card, DialogCom },
 })

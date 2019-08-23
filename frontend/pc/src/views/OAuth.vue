@@ -16,15 +16,15 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { postData, getData } from '../utils/fetch';
-import { API, apiMap } from '@/utils/api';
-import { OAuthRequest, OAuthResponse } from '@/interface/frontend/OAuth';
+import { API, apiMap } from '../utils/api';
+import { OAuthRequest, OAuthResponse } from '../interface/frontend/OAuth';
 import { CheckPreResponse } from '../interface/backend/app/CheckPre';
 import router from '../router';
 
-import TextField from '@/components/TextField.vue';
-import VButton from '@/components/Button.vue';
-import Card from '@/components/Card.vue';
-import DialogCom from '@/components/Dialog.vue';
+import TextField from '../components/TextField.vue';
+import VButton from '../components/Button.vue';
+import Card from '../components/Card.vue';
+import DialogCom from '../components/Dialog.vue';
 
 @Component({
   components: { TextField, VButton, Card, DialogCom },

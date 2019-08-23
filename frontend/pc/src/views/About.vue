@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import VButton from '@/components/Button.vue';
-import Card from '@/components/Card.vue';
+import VButton from '../components/Button.vue';
+import Card from '../components/Card.vue';
 @Component({ components: { Card, VButton } })
 export default class About extends Vue {
   private back() {

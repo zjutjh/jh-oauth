@@ -15,14 +15,14 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { LoginRequest, LoginResponse } from '@/interface/backend/user/Login';
+import { LoginRequest, LoginResponse } from '../interface/backend/user/Login';
 import { postData, getData } from '../utils/fetch';
 import router from '../router';
-import { API, apiMap } from '@/utils/api';
-import TextField from '@/components/TextField.vue';
-import VButton from '@/components/Button.vue';
-import Card from '@/components/Card.vue';
-import DialogCom from '@/components/Dialog.vue';
+import { API, apiMap } from '../utils/api';
+import TextField from '../components/TextField.vue';
+import VButton from '../components/Button.vue';
+import Card from '../components/Card.vue';
+import DialogCom from '../components/Dialog.vue';
 
 @Component({
   components: { TextField, VButton, Card, DialogCom },

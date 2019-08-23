@@ -10,8 +10,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Emit } from 'vue-property-decorator';
-import TextFiled from '@/components/TextFiled.vue';
-import VButton from '@/components/Button.vue';
+import TextFiled from '../components/TextFiled.vue';
+import VButton from '../components/Button.vue';
 @Component({
   components: { TextFiled, VButton},
 })
