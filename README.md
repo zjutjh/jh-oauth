@@ -1,15 +1,17 @@
 # jh-oauth
 第三方应用的oauth2.0授权，含开发者中心和用户授权中心
 
-## 后端
+dev: 开发版本请转到分支dev
 
-dev: 开发版本请转到分支backend-dev
+preview: 测试版本（预览版本）请转到分支preview
 
-preview: 测试版本（预览版本）请转到分支backend-preview
-
-stable: 稳定版本请转到分支backend-stable
+stable: 稳定版本请转到分支stable
 
 ## 开发说明
+
+前端应用代码请写在目录front内，后端代码写在backend内。
+
+请注意，首次创建应用是请手动更新.gitignore文件，并做相应的文件配置声明
 
 ### 导出依赖包
 
