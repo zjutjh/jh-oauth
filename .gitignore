@@ -1,4 +1,7 @@
-venv
-.idea
+# backend ignore files.
+/backend/venv
+/backend/.idea
+/backend/db.sqlite3
 *.pyc
-db.sqlite3
+
+# front ignore files.
