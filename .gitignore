@@ -1,0 +1,7 @@
+# backend ignore files.
+/backend/venv
+/backend/.idea
+/backend/db.sqlite3
+*.pyc
+
+# front ignore files.
