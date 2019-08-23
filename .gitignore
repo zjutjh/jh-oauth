@@ -5,3 +5,14 @@
 *.pyc
 
 # front ignore files.
+/frontend/pc/node_modules
+/frontend/pc/dist
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
