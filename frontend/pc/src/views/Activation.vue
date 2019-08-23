@@ -29,7 +29,7 @@
         class="margeTop"
         label="密码"
         type="password"
-        v-model="pass"
+        v-model="password"
         :valueCheck="passFilter"
         errrText="密码强度不够，需要大小写字母和数字"
       ></text-field>
@@ -37,18 +37,22 @@
         class="margeTop"
         label="确认密码"
         type="password"
-        v-model="passA"
-        :valueCheck="(passA === pass)"
+        v-model="passwordAgain"
+        :valueCheck="CheckPasswordIsSame"
         errrText="密码不一致"
       ></text-field>
       <div class="margeTopRight">
-        <span style="margin:1rem;cursor:pointer" @click="TapClick">❓ 提示</span>
+        <span style="margin:1rem;cursor:pointer" @click="tipClick">❓ 提示</span>
         <span style="margin:1rem;cursor:pointer" @click="aboutClick">❕ 关于</span>
       </div>
     </div>
     <v-button class="right-buttom" text="激活" @click="Activating" :waiting="isWaiting"></v-button>
-    <dialog-com :show="isTipClicked" @close="close"></dialog-com>
-    <dialog-com :show="isError" @close="close"></dialog-com>
+    <dialog-com :show="isTipClicked" @close="closeTip">
+      <template v-slot:main>{{tipMsg}}</template>
+    </dialog-com>
+    <dialog-com :show="isError" @close="close">
+      <template v-slot:main>{{errorMsg}}</template>
+    </dialog-com>
   </card>
 </template>
 
@@ -64,16 +68,18 @@ import router from '../router';
 import { API, apiMap } from '../utils/api';
 import { ActivationRequest, ActivationResponse } from '../interface/backend/user/Activation';
 import stringFilter from '../utils/stringFilter';
+import { routerPath } from '../utils/routerPath';
 @Component({
   components: { TextField, VButton, Card, DialogCom },
 })
-export default class UserAuth extends Vue {
+export default class Activation extends Vue {
   private id: string = '';
-  private pass: string = '';
-  private passA: string = '';
+  private password: string = '';
+  private passwordAgain: string = '';
   private email: string = '';
   private idCard: string = '';
   private isTipClicked: boolean = false;
+  private tipMsg = '';
 
   private passFilter = stringFilter.password;
   private idCardFilter = stringFilter.idCard;
@@ -81,39 +87,46 @@ export default class UserAuth extends Vue {
   private mailFilter = stringFilter.mail;
 
   private isError = false;
+  private errorMsg = '';
   private isWaiting: boolean = false;
 
   private Activating() {
     if (this.idFilter(this.id)
       && this.idCardFilter(this.idCard)
       && this.mailFilter(this.email)
-      && this.passFilter(this.pass)
-      && this.pass === this.passA) {
+      && this.passFilter(this.password)
+      && this.password === this.passwordAgain) {
       const request: ActivationRequest = {
         id: this.id,
         idCard: this.idCard,
-        password: this.pass,
+        password: this.password,
         email: this.email,
       };
       this.isWaiting = true;
       postData(API(apiMap.actUser), request).then((res: ActivationResponse) => {
         this.isWaiting = false;
-        router.push('/');
+        router.push(routerPath.home);
       }).catch(() => {
         this.isWaiting = false;
+        this.isError = true;
       });
     } else {
       this.isError = true;
     }
 
   }
+
+  private CheckPasswordIsSame() {
+    return this.password === this.passwordAgain;
+  }
   private aboutClick() {
-    this.$router.push('/about');
+    this.$router.push(routerPath.about);
   }
-  private close() {
+  private closeDialog() {
     this.isTipClicked = false;
+    this.isError = false;
   }
-  private TapClick() {
+  private tipClick() {
     this.isTipClicked = true;
   }
 }

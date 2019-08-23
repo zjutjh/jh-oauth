@@ -5,9 +5,18 @@ interface OAuthRequest {
     scope: string | undefined;
     state: string | undefined;
 }
-interface OAuthResponse {
-    code: string | undefined;
-    token: string | undefined;
-    state: string | undefined;
+interface OAuthCodeResponse {
+    code: string ;
+    state: string ;
 }
-export { OAuthRequest, OAuthResponse };
+interface OAuthTokenResponse {
+    token: string ;
+    state: string ;
+}
+interface OAuthError {
+    error: string ;
+    error_description: string | undefined;
+    error_uri: string | undefined;
+    state: string ;
+}
+export { OAuthRequest, OAuthCodeResponse, OAuthTokenResponse, OAuthError };

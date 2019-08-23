@@ -10,25 +10,22 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Emit, Watch } from 'vue-property-decorator';
-import Loading from '../components/Loading.vue'
-@Component({ components: { Loading }, })
+import Loading from '../components/Loading.vue';
+@Component({ components: { Loading } })
 export default class VButton extends Vue {
   private priclass: string = '';
   @Prop() private text!: string;
-
   @Prop() private waiting!: string;
+  private clickTimes = 0;
   @Watch('waiting', { immediate: true, deep: true })
   private onWaitingChanged(val: boolean, oldVal: boolean) {
     if (val) {
       this.priclass = 'disable';
-      
     } else {
       this.priclass = '';
     }
-
   }
-  private clickTimes = 0;
-  
+
   @Emit()
   private click() {
     this.clickTimes++;

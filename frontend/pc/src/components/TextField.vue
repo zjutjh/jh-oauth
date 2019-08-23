@@ -20,6 +20,7 @@ export default class TextField extends Vue {
   @Prop() private errrText!: string;
   @Prop() private type!: 'text' | 'password';
   @Prop() private valueCheck!: ValueCheckFunc | boolean;
+  @Model('change', { type: String }) private input!: string;
   private borderColor = '';
   private vinput: string = '';
   private showerr: boolean = false;
@@ -48,13 +49,11 @@ export default class TextField extends Vue {
     this.check(val);
     this.change(val);
   }
-  @Model('change', {
-    type: String,
-  })
-  private input!: string;
 
   @Emit('change')
-  private change(e: string) { }
+  private change(e: string) { 
+    // 
+  }
 
 }
 </script>

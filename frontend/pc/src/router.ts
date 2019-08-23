@@ -9,22 +9,6 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/dev',
-      name: 'dev',
-      component: () => import(/* webpackChunkName: "devcenter" */ './views/DevCenter.vue'),
-      meta: {
-        title: '开发者中心',
-      },
-    },
-    {
-      path: '/user',
-      name: 'user',
-      component: () => import(/* webpackChunkName: "usercenter" */ './views/User.vue'),
-      meta: {
-        title: '用户中心',
-      },
-    },
-    {
       path: '/',
       component: Home,
       children: [

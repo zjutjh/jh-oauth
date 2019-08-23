@@ -42,13 +42,17 @@
         errrText="密码不一致"
       ></text-field>
       <div class="margeTopRight">
-        <span style="margin:1rem;cursor:pointer" @click="TapClick">❓ 提示</span>
+        <span style="margin:1rem;cursor:pointer" @click="tipClick">❓ 提示</span>
         <span style="margin:1rem;cursor:pointer" @click="aboutClick">❕ 关于</span>
       </div>
     </div>
     <v-button class="right-buttom" text="激活" @click="Activating" :waiting="isWaiting"></v-button>
-    <dialog-com :show="isTipClicked" @close="close"></dialog-com>
-    <dialog-com :show="isError" @close="close"></dialog-com>
+    <dialog-com :show="isTipClicked" @close="closeTip">
+      <template v-slot:main>{{tipMsg}}</template>
+    </dialog-com>
+    <dialog-com :show="isError" @close="close">
+      <template v-slot:main>{{errorMsg}}</template>
+    </dialog-com>
   </card>
 </template>
 
@@ -64,6 +68,7 @@ import router from '../router';
 import { API, apiMap } from '../utils/api';
 import { ActivationRequest, ActivationResponse } from '../interface/backend/user/Activation';
 import stringFilter from '../utils/stringFilter';
+import { routerPath } from '../utils/routerPath';
 @Component({
   components: { TextField, VButton, Card, DialogCom },
 })
@@ -74,6 +79,7 @@ export default class Reset extends Vue {
   private email: string = '';
   private idCard: string = '';
   private isTipClicked: boolean = false;
+  private tipMsg = '';
 
   private passFilter = stringFilter.password;
   private idCardFilter = stringFilter.idCard;
@@ -81,6 +87,7 @@ export default class Reset extends Vue {
   private mailFilter = stringFilter.mail;
 
   private isError = false;
+  private errorMsg = '';
   private isWaiting: boolean = false;
 
   private Activating() {
@@ -98,9 +105,10 @@ export default class Reset extends Vue {
       this.isWaiting = true;
       postData(API(apiMap.actUser), request).then((res: ActivationResponse) => {
         this.isWaiting = false;
-        router.push('/');
+        router.push(routerPath.home);
       }).catch(() => {
         this.isWaiting = false;
+        this.isError = true;
       });
     } else {
       this.isError = true;
@@ -112,12 +120,13 @@ export default class Reset extends Vue {
     return this.password === this.passwordAgain;
   }
   private aboutClick() {
-    this.$router.push('/about');
+    this.$router.push(routerPath.about);
   }
-  private close() {
+  private closeDialog() {
     this.isTipClicked = false;
+    this.isError = false;
   }
-  private TapClick() {
+  private tipClick() {
     this.isTipClicked = true;
   }
 }
