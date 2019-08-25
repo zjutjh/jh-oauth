@@ -1,0 +1,18 @@
+# backend ignore files.
+/backend/venv
+/backend/.idea
+/backend/db.sqlite3
+*.pyc
+
+# front ignore files.
+/frontend/pc/node_modules
+/frontend/pc/dist
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
