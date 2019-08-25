@@ -6,66 +6,52 @@ from . import tool
 from ..extensions import config, get_ip
 from ..models import AppScheme, User, UserActivity
 from ..apis import jh_user
+from ..consts import SHORTCUT
+import logging
 
 
 def login(request: HttpRequest):
     """
-    用户登录操作，可指定旧的token以保留access_id信息
+    用户的登录操作，不包含oauth中的登录操作
     :param request:
     :return:
     """
+    # region 获取参数
+    args = tool.get_args(request)
+    if args is None:
+        return Http404()
     try:
-        # region params -> name,password,device_type,[token]
-        args = tool.get_args(request)
-        if args is None:
-            return Http404()
-        name = args['name']
-        password = args['password']
-        device_type = args['device_type']
-        try:
-            token_raw = extensions.decrypt_token(args['token'])
-            if token_raw['uid'] == name and token_raw['password'] == password:
-                access_id = token_raw['access_id']
-            else:
-                access_id = None
-        except KeyError:
-            access_id = None
-        # endregion
-        # region 检查用户
-        user = User.get(name)
-        if user is None:
-            text = jh_user.x_login(name, password)
-            if text == 'pe':
-                return JsonResponse(
-                    {'msg': 'password error',
-                     'shortcut': 'pe'}
-                )
-            elif text == 'une':
-                return JsonResponse(
-                    {'msg': 'user not existed',
-                     'shortcut': 'une'}
-                )
-            user = User.get(name)
-        # endregion
-        if User.checkpw(name, password):
-            ip = get_ip(request)
-            act = UserActivity.x_update(user, 'index', device_type, ip, access_id)
-            tool.push(act)
-            return JsonResponse(
-                {'msg': 'login ok',
-                 'shortcut': 'ok',
-                 'data': act.to_dic(act.token)}
-            )
-        else:
-            return JsonResponse(
-                {'msg': 'password error',
-                 'shortcut': 'pe'}
-            )
-
+        name = tool.check_name(args['name'])
+        password = tool.check_password(args['password'])
+        device_type = tool.check_device_type(args['device_type'])
     except KeyError:
-        return tool.ae
-    except Exception as e:
-        return tool.error(e)
+        return tool.create_res_template(SHORTCUT.AE)
+    except ValueError as e:
+        return tool.create_res_afe(e.args[0])
+    try:
+        token = tool.check_token(args.get('token', None))
+    except ValueError as e:
+        return tool.create_res_afe(e.args[0])
+    access_id = None
+    if token is not None:
+        token_raw = extensions.decrypt_token(token)
+        if token_raw is None:
+            return tool.create_res_template(SHORTCUT.TOKEN_ERROR)
+        if token_raw['uid'] == name and token_raw['password'] == password:
+            access_id = token_raw['access_id']
+    # endregion
+    res = jh_user.login(name, password)
+    shortcut = res['shortcut']
+    if shortcut == SHORTCUT.OK:
+        user = User.create_or_update(name, password, res['data']['email'])
+    else:
+        return tool.create_res_template(shortcut)
+    act = UserActivity.create_or_update(user, 'index', device_type, get_ip(request), access_id)
+    return JsonResponse(
+        {'shortcut': SHORTCUT.OK,
+         'msg': 'login success.',
+         'data': act.to_dic(act.token)}
+    )
 
 
 def logout(request: HttpRequest):
@@ -74,30 +60,26 @@ def logout(request: HttpRequest):
     :param request:
     :return:
     """
+    # region params -> token
+    args = tool.get_args(request)
+    if args is None:
+        return Http404()
     try:
-        # region params -> token
-        args = tool.get_args(request)
-        if args is None:
-            return Http404()
-        token = args['token']
-        act = UserActivity.get(token)
-        if act is None:
-            return JsonResponse(
-                {'msg': 'token is invalid.',
-                 'shortcut': 'e'}
-            )
-        else:
-            act.state = 'fail'
-            act.save()
-            return JsonResponse(
-                {'msg': 'logout ok.',
-                 'shortcut': 'ok'}
-            )
-
+        token = tool.check_token(args['token'])
     except KeyError:
-        return tool.ae
-    except Exception as e:
-        return tool.error(e)
+        return tool.create_res_template(SHORTCUT.AE)
+    except ValueError as e:
+        return tool.create_res_afe(e.args[0])
+    act = UserActivity.get(token)
+    if act is None:
+        return tool.create_res_template(SHORTCUT.TOKEN_ERROR)
+    else:
+        act.state = UserActivity.State.FAIL
+        act.save()
+        return JsonResponse(
+            {'shortcut': SHORTCUT.OK,
+             'msg': 'logout ok.'}
+        )
 
 
 def autologin(request: HttpRequest):
@@ -106,58 +88,41 @@ def autologin(request: HttpRequest):
     :param request:
     :return:
     """
+    args = tool.get_args(request)
+    if args is None:
+        return Http404()
     try:
-        args = tool.get_args(request)
-        if args is None:
-            return Http404()
-        token = args['token']
-        act = UserActivity.get(token)
-        if act is None:
-            return JsonResponse(
-                {'msg': 'token is invalid.',
-                 'shortcut': 'e'}
-            )
-        else:
-            return tool.fetch(token, extensions.get_ip(request), lambda x:
-                {'msg': 'autologin ok',
-                 'shortcut': 'ok',
-                 'data': x.to_dic(x.token)}, True)
+        token = tool.check_token(args['token'])
     except KeyError:
-        return tool.ae
-    except Exception as e:
-        return tool.error(e)
+        return tool.create_res_template(SHORTCUT.AE)
+    except ValueError as e:
+        return tool.create_res_afe(e.args[0])
+    act = UserActivity.get(token)
+    if act is None:
+        return tool.create_res_template(SHORTCUT.TOKEN_ERROR)
 
-
-def getstate(request: HttpRequest):
-    try:
-        args = tool.get_args(request)
-        if args is None:
-            return Http404()
-        token = args['token']
-        return tool.fetch(token, extensions.get_ip(request), lambda x:
-            {'msg': 'query ok',
-             'shortcut': 'ok',
-             'data': x.to_dic_state()}
-        )
-    except KeyError:
-        return tool.ae
-    except Exception as e:
-        return tool.error(e)
+    return tool.fetch(token, extensions.get_ip(request), lambda x:
+        {'msg': 'autologin ok',
+         'shortcut': SHORTCUT.OK,
+         'data': x.to_dic(x.token)}, True)
 
 
 def getaccessinfo(request: HttpRequest):
+
+    args = tool.get_args(request)
+    if args is None:
+        return Http404()
     try:
-        args = tool.get_args(request)
-        if args is None:
-            return Http404()
-        token = args['token']
-        return tool.fetch(token, extensions.get_ip(request), lambda x:
-            {'msg': 'query ok',
-             'shortcut': 'ok',
-             'data': [item.to_dic_simple() for item in UserActivity.objects.filter(user=x.user)]}
-        )
+        token = tool.check_token(args['token'])
     except KeyError:
-        return tool.ae
-    except Exception as e:
-        return tool.error(e)
+        return tool.create_res_template(SHORTCUT.AE)
+    except ValueError as e:
+        return tool.create_res_afe(e.args[0])
+    return tool.fetch(token, extensions.get_ip(request), lambda x:
+        {'msg': 'query ok',
+         'shortcut': 'ok',
+         'data': [item.to_dic_simple() for item in UserActivity.objects.filter(user=x.user)]}
+    )
+
+
 
