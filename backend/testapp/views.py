@@ -1,7 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpRequest, Http404
-from jh_oauth import settings
-from oauth.externlib import http
 
 url_base = 'http://127.0.0.1/'
 

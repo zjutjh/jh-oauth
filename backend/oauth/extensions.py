@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.http import HttpRequest
 import pytz
 from . import config
+import binascii
 
 aes = Aes(config.AES_KEY)
 
@@ -52,19 +53,39 @@ def decrypt_token(token: str):
     :param token: 登录的token
     :return:
     """
-    token_raw = aes.decrypt(token)
-
+    try:
+        token_raw = aes.decrypt(token)
+    except binascii.Error:
+        return None
     args = token_raw.split('::')
     return {'uid': args[0], 'software': args[1],  'access_id': args[2], 'device_type': args[3]}
 
 
-def encrypt_code(name: str, appkey: str, time: timezone.datetime):
-    token_raw = f'{name}::{appkey}::{format_time(time)}'
+def encrypt_refresh_token(uid: str, access_id: str, software: str, device_type: str):
+    token_raw = f'refresh::{uid}::{software}::{access_id}::{device_type}'
+    return aes.encrypt(token_raw)
+
+
+def decrypt_refresh_token(token: str):
+    """
+    获取原有的登录信息
+    :param token: 登录的token
+    :return:
+    """
+    try:
+        token_raw = aes.decrypt(token)
+    except binascii.Error:
+        return None
+    args = token_raw.split('::')
+    return {'uid': args[1], 'software': args[2],  'access_id': args[3], 'device_type': args[4]}
+
+
+def encrypt_code(name: str, appkey: str, access_id: str):
+    token_raw = f'{name}::{appkey}::{access_id}'
     return aes.encrypt(token_raw)
 
 
 def decrypt_code(token: str):
     token_raw = aes.decrypt(token)
     args = token_raw.split('::')
-    time = timezone.datetime.fromisoformat(args[2]).astimezone(pytz.timezone('UTC'))
-    return {'name': args[0], 'appkey': args[1], 'time': time}
+    return {'name': args[0], 'appkey': args[1], 'access_id': args[2]}
