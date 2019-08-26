@@ -1,5 +1,5 @@
 export default interface Response {
     msg: string;
-    shortcut: string|'le'|'b';
+    shortcut: 'le'|'b'|'afe'|'tle'|'ok'|'pwe'|'une';
     data: any;
 }

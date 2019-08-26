@@ -93,7 +93,7 @@ export default class Home extends Vue { }
     left: 0;
   }
   to {
-    left: -2000px;
+    left: -100rem;
   }
 }
 @keyframes wave-v {

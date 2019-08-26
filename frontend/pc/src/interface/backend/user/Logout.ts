@@ -4,6 +4,6 @@ interface LogoutRequest {
     token: string;
 }
 interface LogoutResponse extends JsonResponse {
-    shortcut: 'ok' | 'e' | 'ae' ;
+    shortcut: 'ok'  | 'afe'  ;
 }
 export { LogoutRequest, LogoutResponse };

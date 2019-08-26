@@ -3,7 +3,7 @@
     <span class="fieldGroup" :class="borderColor">
       <label class="ms-fontWeight-semibold root">{{label}}</label>
       <span style="border-right: solid;border-color: rgb(138, 136, 134);border-width: 1px;"></span>
-      <input class="field" v-if="type=='text'" v-model="inputa" />
+      <input class="field" v-if="type=='text'" v-model="vinput" />
       <input class="field" v-if="type=='password'" type="password" v-model="vinput" />
     </span>
     <div v-if="errrText&&showerr" class="error ms-fontWeight-semibold">{{errrText}}</div>
@@ -44,7 +44,7 @@ export default class TextField extends Vue {
     }
   }
 
-  @Watch('inputa')
+  @Watch('vinput')
   private onInputChanged(val: string, oldVal: string) {
     this.check(val);
     this.change(val);

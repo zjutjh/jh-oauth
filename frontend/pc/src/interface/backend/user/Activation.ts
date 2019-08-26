@@ -17,6 +17,6 @@ interface ActivationResponse extends JsonResponse {
         user_type: string,
         permission: string,
     };
-    shortcut: 'ok' | 'pe' | 'une'  | 'ae';
+    shortcut: 'ok' | 'pwe' | 'une'  | 'afe';
 }
 export {ActivationRequest , ActivationResponse };

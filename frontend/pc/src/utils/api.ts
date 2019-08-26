@@ -9,6 +9,8 @@ enum apiMap {
     authUser = '/api/user/login',
     logout= '/api/user/logout',
 
+    oauth = '/api/oauth/getcode',
+
     actUser = '/user/activation',
     listUserApp = '/user/app/list',
     deleteUserApp = '/user/app/del',

@@ -8,6 +8,6 @@ interface CheckPreResponse extends JsonResponse {
     data: {
         name: string,
     };
-    shortcut: 'ok' | 'pe' | 'une'  | 'ae';
+    shortcut: 'ok' | 'pwe' | 'une'  | 'afe';
 }
 export {CheckPreResponse};

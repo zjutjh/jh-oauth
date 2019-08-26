@@ -1,4 +1,4 @@
-  <template>
+<template>
   <card title="精弘认证 激活" class="auth-panel">
     <div style="margin-bottom:2.5rem;">
       <text-field
@@ -58,6 +58,7 @@
 
 
 <script lang="ts">
+// 没有接口，未完成
 import DialogCom from '../components/Dialog.vue';
 import { Component, Prop, Vue, Emit } from 'vue-property-decorator';
 import TextField from '../components/TextField.vue';
@@ -91,18 +92,17 @@ export default class Activation extends Vue {
   private isWaiting: boolean = false;
 
   private Activating() {
-    if (this.idFilter(this.id)
-      && this.idCardFilter(this.idCard)
-      && this.mailFilter(this.email)
-      && this.passFilter(this.password)
-      && this.password === this.passwordAgain) {
+    if (this.checkInput()) {
+
       const request: ActivationRequest = {
         id: this.id,
         idCard: this.idCard,
         password: this.password,
         email: this.email,
       };
+
       this.isWaiting = true;
+
       postData(API(apiMap.actUser), request).then((res: ActivationResponse) => {
         this.isWaiting = false;
         router.push(routerPath.home);
@@ -114,6 +114,14 @@ export default class Activation extends Vue {
       this.isError = true;
     }
 
+  }
+
+  private checkInput() {
+    return this.idFilter(this.id)
+      && this.idCardFilter(this.idCard)
+      && this.mailFilter(this.email)
+      && this.passFilter(this.password)
+      && this.password === this.passwordAgain;
   }
 
   private CheckPasswordIsSame() {

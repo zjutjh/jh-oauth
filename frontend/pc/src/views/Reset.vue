@@ -1,5 +1,5 @@
   <template>
-  <card title="精弘认证 密码重置" class="auth-panel">
+  <card title="精弘认证 重置密码" class="auth-panel">
     <div style="margin-bottom:2.5rem;">
       <text-field
         class="margeTop"
@@ -58,6 +58,7 @@
 
 
 <script lang="ts">
+// 没有接口，未完成
 import DialogCom from '../components/Dialog.vue';
 import { Component, Prop, Vue, Emit } from 'vue-property-decorator';
 import TextField from '../components/TextField.vue';
@@ -91,22 +92,22 @@ export default class Reset extends Vue {
   private isWaiting: boolean = false;
 
   private Activating() {
-    if (this.idFilter(this.id)
-      && this.idCardFilter(this.idCard)
-      && this.mailFilter(this.email)
-      && this.passFilter(this.password)
-      && this.password === this.passwordAgain) {
+    if (this.checkInput()) {
+
       const request: ActivationRequest = {
         id: this.id,
         idCard: this.idCard,
         password: this.password,
         email: this.email,
       };
+
       this.isWaiting = true;
+
       postData(API(apiMap.actUser), request).then((res: ActivationResponse) => {
         this.isWaiting = false;
         router.push(routerPath.home);
       }).catch(() => {
+
         this.isWaiting = false;
         this.isError = true;
       });
@@ -114,6 +115,14 @@ export default class Reset extends Vue {
       this.isError = true;
     }
 
+  }
+
+  private checkInput() {
+    return this.idFilter(this.id)
+      && this.idCardFilter(this.idCard)
+      && this.mailFilter(this.email)
+      && this.passFilter(this.password)
+      && this.password === this.passwordAgain;
   }
 
   private CheckPasswordIsSame() {

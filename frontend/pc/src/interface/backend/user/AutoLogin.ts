@@ -1,12 +1,9 @@
 // logout= '/api/user/login',
 import JsonResponse from '@/interface/JsonResponse';
-interface LoginRequest {
-    name: string;
-    password: string;
-    device_type: string;
-    token?: string;
+interface AutoLoginRequest {
+    token: string;
 }
-interface LoginResponse extends JsonResponse {
+interface AutoLoginResponse extends JsonResponse {
     data: {
         access_time: string,
         token: string,
@@ -17,7 +14,6 @@ interface LoginResponse extends JsonResponse {
         user_type: string,
         permission: string,
     };
-    shortcut: 'ok' | 'pwe' | 'une' | 'afe';
-    msg: string;
+    shortcut: 'ok' | 'pwe' | 'une' | 'afe' | 'tle';
 }
-export { LoginRequest, LoginResponse };
+export { AutoLoginRequest, AutoLoginResponse };

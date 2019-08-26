@@ -54,4 +54,8 @@ body{
 .margeTopRight {
   margin-top: 1rem;
 }
+.Stbotton{
+margin-left: 1rem;
+margin-right: 1rem;
+}
 </style>
