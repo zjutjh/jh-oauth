@@ -51,9 +51,7 @@ export default class TextField extends Vue {
   }
 
   @Emit('change')
-  private change(e: string) { 
-    // 
-  }
+  private change(e: string) {}
 
 }
 </script>

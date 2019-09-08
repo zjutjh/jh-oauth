@@ -14,7 +14,7 @@ import Card from '../components/Card.vue';
 @Component({ components: { Card, VButton } })
 export default class Invalid extends Vue {
   private back() {
-    this.$router.back();
+    history.back();
   }
 }
 </script>

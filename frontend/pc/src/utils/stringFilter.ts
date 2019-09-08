@@ -29,7 +29,7 @@ export default class {
         }
         return true;
     }
-    public static studentNum(val: string): boolean {
+    public static jhNum(val: string): boolean {
         const reg = /^[0-9a-zA-Z_]{1,}$/;
         if (reg.test(val) === false) {
             return false;

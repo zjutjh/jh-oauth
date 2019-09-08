@@ -4,7 +4,7 @@
     <transition name="drop">
       <div class="middle">
         <!--style 通过props 控制内容的样式  -->
-        <div class="dialog-content card ms-depth-64" style="padding:1rem;">
+        <div class="dialog-content card ms-depth-64" style="padding:0.5rem;">
           <div class="dialog_head back ms-fontWeight-bold">
             <!--弹窗头部 title-->
             <slot name="header">提示信息</slot>
@@ -16,7 +16,7 @@
             >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et sunt atque repellat sint laboriosam libero possimus doloremque, itaque ipsa voluptatum molestias, corporis explicabo aliquid quasi accusantium illo a quo quam?</slot>
           </div>
           <!--弹窗关闭按钮-->
-          <v-button @click="close" class="margeBottom">关闭</v-button>
+          <v-button @click="closed" class="margeBottom">关闭</v-button>
         </div>
       </div>
     </transition>
@@ -69,11 +69,12 @@ import VButton from '@/components/Button.vue';
 @Component({
   components: { VButton },
 })
-export default class UserAuth extends Vue {
+export default class Dialog extends Vue {
   @Prop() private show!: boolean;
   @Emit()
-  private close() {
-    // this.show = false;
+  private close() { }
+  private closed() {
+    this.close();
   }
 }
 </script>

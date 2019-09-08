@@ -35,8 +35,11 @@ export default class Home extends Vue { }
 
 .home {
   background-image: linear-gradient(to bottom, #7acfa6, #7fcfad);
+  z-index: -2;/*FireFox bug*/
 }
 .auth-panel {
+  overflow-y: auto;
+  z-index: 10;
   transition: all 1s;
   width: 30rem;
   max-height: 80%;
@@ -53,6 +56,7 @@ export default class Home extends Vue { }
   animation: wave-v 3s;
   animation-direction: alternate;
   animation-iteration-count: infinite;
+  z-index: -1;/*FireFox bug*/
 }
 /* Wave */
 .wave-box {
@@ -69,6 +73,7 @@ export default class Home extends Vue { }
   animation-iteration-count: infinite;
   position: absolute;
   opacity: 0.3;
+  z-index: -1;/*FireFox bug*/
 }
 .wave-1 {
   bottom: 0;
@@ -107,8 +112,11 @@ export default class Home extends Vue { }
 @media screen and (max-width: 956px) {
   .logo {
     left: calc(50% - 5rem);
+    z-index: -1;/*FireFox bug*/
   }
   .auth-panel {
+    z-index: 10;
+    overflow-y: auto;
     transition: all 1s;
     max-height: 85%;
     min-height: 65%;

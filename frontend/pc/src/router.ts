@@ -12,14 +12,6 @@ export default new Router({
       path: '/',
       component: Home,
       children: [
-        // {
-        //   path: '/',
-        //   name: 'auth',
-        //   component: () => import(/* webpackChunkName: "auth" */ './views/Auth.vue'),
-        //   meta: {
-        //     title: '用户中心认证',
-        //   },
-        // },
         {
           path: '/',
           name: 'oauth',

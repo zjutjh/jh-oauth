@@ -1,5 +1,5 @@
-  <template>
-  <card title="精弘认证 重置密码" class="auth-panel">
+<template>
+  <card title="精弘认证 激活" class="auth-panel">
     <div style="margin-bottom:2.5rem;">
       <text-field
         class="margeTop"
@@ -7,7 +7,7 @@
         type="text"
         v-model="id"
         :valueCheck="idFilter"
-        errrText="123"
+        errrText="请输入正确的精弘通行证"
       ></text-field>
       <text-field
         class="margeTop"
@@ -42,15 +42,15 @@
         errrText="密码不一致"
       ></text-field>
       <div class="margeTopRight">
-        <span style="margin:1rem;cursor:pointer" @click="tipClick">❓ 提示</span>
-        <span style="margin:1rem;cursor:pointer" @click="aboutClick">❕ 关于</span>
+        <span style="margin:1.5rem;cursor:pointer" @click="tipClick">❓ 提示</span>
+        <span style="margin:1.5rem;cursor:pointer" @click="aboutClick">❕ 关于</span>
       </div>
     </div>
-    <v-button class="right-buttom" text="激活" @click="Activating" :waiting="isWaiting"></v-button>
-    <dialog-com :show="isTipClicked" @close="closeTip">
+    <v-button  text="激活" @click="Activating" :waiting="isWaiting"></v-button>
+    <dialog-com :show="isTipClicked" @close="closeDialog">
       <template v-slot:main>{{tipMsg}}</template>
     </dialog-com>
-    <dialog-com :show="isError" @close="close">
+    <dialog-com :show="isError" @close="closeDialog">
       <template v-slot:main>{{errorMsg}}</template>
     </dialog-com>
   </card>
@@ -70,51 +70,36 @@ import { API, apiMap } from '../utils/api';
 import { ActivationRequest, ActivationResponse } from '../interface/backend/user/Activation';
 import stringFilter from '../utils/stringFilter';
 import { routerPath } from '../utils/routerPath';
+import { Error } from '../utils/error';
+import BaseView from '../views/BaseView.vue';
 @Component({
   components: { TextField, VButton, Card, DialogCom },
 })
-export default class Reset extends Vue {
+export default class Activation extends BaseView {
   private id: string = '';
   private password: string = '';
   private passwordAgain: string = '';
   private email: string = '';
   private idCard: string = '';
-  private isTipClicked: boolean = false;
-  private tipMsg = '';
-
-  private passFilter = stringFilter.password;
-  private idCardFilter = stringFilter.idCard;
-  private idFilter = stringFilter.studentNum;
-  private mailFilter = stringFilter.mail;
-
-  private isError = false;
-  private errorMsg = '';
-  private isWaiting: boolean = false;
 
   private Activating() {
-    if (this.checkInput()) {
+    if (!this.checkInput()) { this.setError(Error.InputError); return; }
 
-      const request: ActivationRequest = {
-        id: this.id,
-        idCard: this.idCard,
-        password: this.password,
-        email: this.email,
-      };
+    const request: ActivationRequest = {
+      id: this.id,
+      idCard: this.idCard,
+      password: this.password,
+      email: this.email,
+    };
 
-      this.isWaiting = true;
-
-      postData(API(apiMap.actUser), request).then((res: ActivationResponse) => {
+    this.isWaiting = true;
+    postData(API(apiMap.actUser), request)
+      .then((res: ActivationResponse) => {
         this.isWaiting = false;
+        if (res.shortcut !== 'ok') { throw res.msg; }
         router.push(routerPath.home);
-      }).catch(() => {
-
-        this.isWaiting = false;
-        this.isError = true;
-      });
-    } else {
-      this.isError = true;
-    }
-
+      })
+      .catch((e) => { this.setError(e); });
   }
 
   private checkInput() {
@@ -127,16 +112,6 @@ export default class Reset extends Vue {
 
   private CheckPasswordIsSame() {
     return this.password === this.passwordAgain;
-  }
-  private aboutClick() {
-    this.$router.push(routerPath.about);
-  }
-  private closeDialog() {
-    this.isTipClicked = false;
-    this.isError = false;
-  }
-  private tipClick() {
-    this.isTipClicked = true;
   }
 }
 </script>
