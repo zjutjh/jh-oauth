@@ -7,6 +7,7 @@
       <img class="wave-2 wave" src="/img/wave.png" alt="wave" />
       <img class="wave-3 wave" src="/img/wave.png" alt="wave" />
     </div>
+    
     <div class="middle auth-content">
       <transition name="fade">
         <router-view />
@@ -35,11 +36,11 @@ export default class Home extends Vue { }
 
 .home {
   background-image: linear-gradient(to bottom, #7acfa6, #7fcfad);
-  z-index: -2;/*FireFox bug*/
+  /*FireFox bug*/
 }
 .auth-panel {
   overflow-y: auto;
-  z-index: 10;
+  /* z-index: 10; */
   transition: all 1s;
   width: 30rem;
   max-height: 80%;
@@ -48,6 +49,7 @@ export default class Home extends Vue { }
   margin-left: auto;
 }
 .logo {
+  z-index: 0!important;
   position: absolute;
   bottom: 15rem;
   width: 10rem;
@@ -56,7 +58,10 @@ export default class Home extends Vue { }
   animation: wave-v 3s;
   animation-direction: alternate;
   animation-iteration-count: infinite;
-  z-index: -1;/*FireFox bug*/
+  
+}
+*{
+  z-index: 10;
 }
 /* Wave */
 .wave-box {
@@ -64,16 +69,18 @@ export default class Home extends Vue { }
   width: 100%;
   position: absolute;
   bottom: 0;
+  z-index: -1!important;/*FireFox bug*/
   height: 100%;
 }
 .wave {
+  z-index: 0!important;
   transition: all 1s;
   animation: wave 10s;
   animation-direction: alternate;
   animation-iteration-count: infinite;
   position: absolute;
   opacity: 0.3;
-  z-index: -1;/*FireFox bug*/
+   /*FireFox bug*/
 }
 .wave-1 {
   bottom: 0;
@@ -112,10 +119,10 @@ export default class Home extends Vue { }
 @media screen and (max-width: 956px) {
   .logo {
     left: calc(50% - 5rem);
-    z-index: -1;/*FireFox bug*/
+    /*FireFox bug*/
   }
   .auth-panel {
-    z-index: 10;
+    /* z-index: 10; */
     overflow-y: auto;
     transition: all 1s;
     max-height: 85%;

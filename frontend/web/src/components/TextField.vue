@@ -3,8 +3,8 @@
     <span class="fieldGroup" :class="borderColor">
       <label class="ms-fontWeight-semibold root">{{label}}</label>
       <span style="border-right: solid;border-color: rgb(138, 136, 134);border-width: 1px;"></span>
-      <input class="field" v-if="type=='text'" v-model="vinput" />
-      <input class="field" v-if="type=='password'" type="password" v-model="vinput" />
+      <input class="field" v-if="type=='text'" v-model="vinput" :disabled="disable"/>
+      <input class="field" v-if="type=='password'" type="password" v-model="vinput" :disabled="disable" />
     </span>
     <div v-if="errrText&&showerr" class="error ms-fontWeight-semibold">{{errrText}}</div>
   </div>
@@ -17,6 +17,7 @@ type ValueCheckFunc = (source: string) => boolean;
 @Component
 export default class TextField extends Vue {
   @Prop() private label!: string;
+  @Prop() private disable!: string;
   @Prop() private errrText!: string;
   @Prop() private type!: 'text' | 'password';
   @Prop() private valueCheck!: ValueCheckFunc | boolean;

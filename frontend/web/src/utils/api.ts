@@ -7,6 +7,7 @@ const serverUrl = 'http://user.jh.zjut.cn';
 
 enum apiMap {
     authUser = '/api/user/login',
+    autoUser = '/api/user/autologin',
     logout= '/api/user/logout',
 
     oauth = '/api/oauth/getcode',

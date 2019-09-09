@@ -29,10 +29,9 @@
   margin-bottom: 2rem;
 }
 .margeBottom {
-  position: absolute;
-
-  bottom: 0.5rem;
+  position:static;
   left: 40%;
+  right: 40%;
   text-align: center;
 }
 /* 最外层 设置position定位 */

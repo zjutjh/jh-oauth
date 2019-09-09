@@ -14,6 +14,7 @@ interface AutoLoginResponse extends JsonResponse {
         user_type: string,
         permission: string,
     };
+    msg: string;
     shortcut: 'ok' | 'pwe' | 'une' | 'afe' | 'tle';
 }
 export { AutoLoginRequest, AutoLoginResponse };

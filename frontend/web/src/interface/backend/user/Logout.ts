@@ -5,5 +5,6 @@ interface LogoutRequest {
 }
 interface LogoutResponse extends JsonResponse {
     shortcut: 'ok'  | 'afe'  ;
+    msg: string;
 }
 export { LogoutRequest, LogoutResponse };

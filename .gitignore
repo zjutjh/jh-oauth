@@ -5,8 +5,8 @@
 *.pyc
 
 # front ignore files.
-/frontend/pc/node_modules
-/frontend/pc/dist
+/frontend/web/node_modules
+/frontend/web/dist
 
 # Editor directories and files
 .idea

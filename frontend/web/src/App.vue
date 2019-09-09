@@ -11,13 +11,13 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  transform: translate3d(0, 0, 0);
 }
 body {
   padding: 0;
   margin: 0;
   background-color: #efefef;
 }
-
 .outer {
   display: table;
   position: absolute;
@@ -28,18 +28,9 @@ body {
   display: flex;
   flex-direction: row;
 }
+
 .card {
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 2rem;
-  min-width: 30%;
-  min-height: 40%;
-  overflow: hidden;
-  border-radius: 2rem;
-  transition: box-shadow 0.5s;
-}
-@supports (backdrop-filter: blur) {
-  .card {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.7);
     padding: 2rem;
     min-width: 30%;
     min-height: 40%;
@@ -49,8 +40,6 @@ body {
     -webkit-backdrop-filter: blur(1rem);
     transition: box-shadow 0.5s;
   }
-}
-
 .middle {
   display: table-cell;
   vertical-align: middle;
